@@ -1,20 +1,44 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import JMap from "../map/Map";
+import Point from "./Point.vue";
+const locations = [
+  {
+    point: [98.567901, 16.628101],
+    content: "1",
+  },
+  {
+    point: [96.4, 18.08],
+    content: "2",
+  },
+  {
+    point: [97.7, 16.08],
+    content: "3",
+  },
+];
+const locationEl = ref(null);
+let jMap: JMap;
 onMounted(() => {
-  const jMap = new JMap("map");
-  jMap.createMarkers(
-    [
-      [98.567901, 16.628101],
-      [96.4, 18.08],
-      [97.7, 16.08],
-    ],
-    "point"
-  );
+  jMap = new JMap("map");
+  locations.forEach((location, i) => {
+    jMap.createMarkers(location.point, {
+      className: "point",
+      dom: (locationEl.value && locationEl.value[i].$el) || undefined,
+    });
+  });
 });
+function pointClick(location: { point: number[]; content: string }) {
+  jMap.createPopup(location.point, { content: location.content });
+}
 </script>
 <template>
   <div id="map" style="width: 100%; height: 100%"></div>
+  <Point
+    v-for="location in locations"
+    :key="location.content"
+    ref="locationEl"
+    @click="pointClick(location)"
+  />
 </template>
 <style lang="scss">
 .point {

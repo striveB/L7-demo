@@ -1,4 +1,4 @@
-import { Scene, GeoLocate, Marker } from "@antv/l7";
+import { Scene, GeoLocate, Marker,Popup } from "@antv/l7";
 import { GaodeMap } from "@antv/l7-maps";
 export default class JMap {
   scene: Scene;
@@ -23,19 +23,43 @@ export default class JMap {
     });
     this.scene.addControl(new GeoLocate());
   }
-  createMarkers(points: number[][], className: string) {
+  createMarkers(point: number[], parmas: {
+    className: string,
+    dom?: HTMLElement
+  }) {
     // 清空所有点dom
-    document.querySelectorAll("."+className).forEach((point) => {
+    document.querySelectorAll("." + parmas.className).forEach((point) => {
       point.remove();
     });
-    points.forEach((point) => {
-      const pointDom = document.createElement("div");
-      pointDom.className = className;
+    let pointDom = parmas.dom
+    if(!pointDom){
+      pointDom = document.createElement("div");
+      pointDom.className = parmas.className;
       document.body.appendChild(pointDom);
-      const marker = new Marker({
-        element: pointDom,
-      }).setLnglat({ lng: point[0], lat: point[1] });
-      this.scene.addMarker(marker);
+    }
+    const marker = new Marker({
+      element: pointDom,
+    }).setLnglat({ lng: point[0], lat: point[1] });
+    this.scene.addMarker(marker);
+  }
+  createPopup(point: number[], params: {
+    title?: string;
+    content: string;
+  }) {
+    const popup = new Popup({
+      // 初始锚点经纬度
+      lngLat: {
+        lng: point[0],
+        lat: point[1],
+      },
+      // Popup 标题
+      title: params.title,
+      // Popup 内容
+      html: params.content,
+      closeButton: false,
+      offsets: [0, 12],
     });
+    this.scene.addPopup(popup);
+    return popup;
   }
 }
