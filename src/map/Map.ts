@@ -1,27 +1,34 @@
-import { Scene, GeoLocate, Marker,Popup } from "@antv/l7";
+import { Scene, Marker,Popup } from "@antv/l7";
 import { GaodeMap } from "@antv/l7-maps";
 export default class JMap {
+  map: GaodeMap;
   scene: Scene;
   constructor(id: string) {
+    this.map = new GaodeMap({
+      // 倾斜度（3D效果）
+      pitch: 38,
+      // 地图样式 dark light normal blank （无底图）
+      style: "amap://styles/grey?isPublic=true",
+      // 地图中心点
+      center: [98.567901, 16.628101],
+      // 默认缩放层级
+      zoom: 9,
+      minZoom: 9,
+      maxZoom: 9.5,
+      token: '6f282ce85c14c5bbd9aae27355d04cf0'
+    })
     // 同样你也可以初始化一个 Mapbox 地图
     this.scene = new Scene({
       // 容器挂载元素id
       id,
       // 高德地图
-      map: new GaodeMap({
-        // 倾斜度（3D效果）
-        pitch: 38,
-        // 地图样式 dark light normal blank （无底图）
-        style: "dark",
-        // 地图中心点
-        center: [98.567901, 16.628101],
-        // 默认缩放层级
-        zoom: 9,
-        minZoom: 9,
-        maxZoom: 9.5,
-      }),
+      map: this.map,
     });
-    this.scene.addControl(new GeoLocate());
+    this.scene.on("loaded", () => {
+      this.scene.on("click", (e) => {
+        console.log(e.lnglat.lng, e.lnglat.lat)
+      })
+    })
   }
   createMarkers(point: number[], parmas: {
     className: string,

@@ -8,12 +8,16 @@ const locations = [
     content: "1",
   },
   {
-    point: [96.4, 18.08],
+    point: [99.129799, 16.84641],
     content: "2",
   },
   {
-    point: [97.7, 16.08],
+    point: [97.585562, 16.703195],
     content: "3",
+  },
+  {
+    point: [98.153936, 17.391662],
+    content: "4",
   },
 ];
 const locationEl = ref(null);
@@ -28,7 +32,7 @@ onMounted(() => {
   });
 });
 function pointClick(location: { point: number[]; content: string }) {
-  jMap.createPopup(location.point, { content: location.content });
+  // jMap.createPopup(location.point, { content: location.content });
 }
 </script>
 <template>
