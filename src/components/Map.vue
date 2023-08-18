@@ -44,16 +44,3 @@ function pointClick(location: { point: number[]; content: string }) {
     @click="pointClick(location)"
   />
 </template>
-<style lang="scss">
-.point {
-  width: 15px;
-  height: 15px;
-  background-color: yellow;
-  border-radius: 50%;
-  position: absolute;
-  &:hover {
-    transition: all 0.3s;
-    transform: translate(-50%, -100%) scale(1.5) !important;
-  }
-}
-</style>
